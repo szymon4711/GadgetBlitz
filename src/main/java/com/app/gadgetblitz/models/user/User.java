@@ -9,7 +9,6 @@ import java.util.Date;
 
 @Data
 @Document("users")
-@AllArgsConstructor
 public class User {
     @Id
     private String id;
