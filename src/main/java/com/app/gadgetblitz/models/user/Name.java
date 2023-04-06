@@ -1,6 +1,5 @@
 package com.app.gadgetblitz.models.user;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data

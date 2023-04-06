@@ -10,6 +10,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.math.BigDecimal;
+
 @Data
 @Document("phones")
 public class Phone {
@@ -29,7 +31,7 @@ public class Phone {
     private String colors;
     private Display display;
     private String model;
-    private String price; // TODO price should be BigDecimal
+    private int price; // TODO price should be BigDecimal
     private Storage storage;
     private int year; //TODO this should be date
 
