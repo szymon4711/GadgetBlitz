@@ -1,6 +1,6 @@
-package com.app.gadgetblitz.controllers;
+package com.app.gadgetblitz.controller;
 
-import com.app.gadgetblitz.models.user.User;
+import com.app.gadgetblitz.model.user.User;
 import com.app.gadgetblitz.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

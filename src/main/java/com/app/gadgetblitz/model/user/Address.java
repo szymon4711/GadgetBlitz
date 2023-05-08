@@ -1,4 +1,4 @@
-package com.app.gadgetblitz.models.user;
+package com.app.gadgetblitz.model.user;
 
 import lombok.Data;
 
