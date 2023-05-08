@@ -1,5 +1,6 @@
 package com.app.gadgetblitz.service;
 
+import com.app.gadgetblitz.dto.PhoneFullDto;
 import com.app.gadgetblitz.dto.PhoneSimpleDto;
 import com.app.gadgetblitz.dto.mapper.PhoneMapper;
 import com.app.gadgetblitz.model.phone.Phone;
@@ -21,12 +22,13 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public class PhoneServiceImpl implements PhoneService {
     private final PhoneRepository repository;
-    private final PhoneMapper phoneMapper;
+    private final PhoneMapper.Simple phoneSimpleMapper;
     private final MongoTemplate mongoTemplate;
+    private final PhoneMapper.Full phoneFullMapper;
 
     @Override
     public List<PhoneSimpleDto> findAll() {
-        return repository.findAll().stream().map(phoneMapper::toDto).collect(Collectors.toList());
+        return repository.findAll().stream().map(phoneSimpleMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
@@ -53,15 +55,15 @@ public class PhoneServiceImpl implements PhoneService {
             c = new Criteria().andOperator(criteriaList.toArray(new Criteria[0]));
 
         Query query = new Query(c);
-        List<PhoneSimpleDto> phones = mongoTemplate.find(query, Phone.class).stream().map(phoneMapper::toDto).collect(Collectors.toList());
+        List<PhoneSimpleDto> phones = mongoTemplate.find(query, Phone.class).stream().map(phoneSimpleMapper::toDto).collect(Collectors.toList());
 
         phones = filterByPrice(priceMin, priceMax, phones);
         return phones;
     }
 
     @Override
-    public Optional<Phone> findById(String id) {
-        return repository.findById(id);
+    public Optional<PhoneFullDto> findById(String id) {
+        return repository.findById(id).map(phoneFullMapper::toDto);
     }
 
     private List<PhoneSimpleDto> filterByPrice(BigDecimal priceMin, BigDecimal priceMax, List<PhoneSimpleDto> phones) {

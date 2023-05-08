@@ -1,7 +1,7 @@
 package com.app.gadgetblitz.controller;
 
+import com.app.gadgetblitz.dto.PhoneFullDto;
 import com.app.gadgetblitz.dto.PhoneSimpleDto;
-import com.app.gadgetblitz.model.phone.Phone;
 import com.app.gadgetblitz.service.PhoneService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -29,8 +29,8 @@ public class PhoneController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Phone>> getPhoneById(@PathVariable String id) {
-        Optional<Phone> phone = phoneService.findById(id);
+    public ResponseEntity<Optional<PhoneFullDto>> getPhoneById(@PathVariable String id) {
+        Optional<PhoneFullDto> phone = phoneService.findById(id);
         if (phone.isEmpty())
             return ResponseEntity.notFound().build();
         return ResponseEntity.ok(phone);
@@ -57,6 +57,4 @@ public class PhoneController {
             return ResponseEntity.notFound().build();
         return ResponseEntity.ok(phones);
     }
-
-
 }

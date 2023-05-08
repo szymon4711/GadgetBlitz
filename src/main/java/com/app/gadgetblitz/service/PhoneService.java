@@ -1,7 +1,7 @@
 package com.app.gadgetblitz.service;
 
+import com.app.gadgetblitz.dto.PhoneFullDto;
 import com.app.gadgetblitz.dto.PhoneSimpleDto;
-import com.app.gadgetblitz.model.phone.Phone;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,7 +16,5 @@ public interface PhoneService {
                                              BigDecimal priceMin, BigDecimal priceMax,
                                              Integer cameraBackMin, Integer cameraBackMax);
 
-    Optional<Phone> findById(String id);
-
-
+    Optional<PhoneFullDto> findById(String id);
 }
