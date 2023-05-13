@@ -45,7 +45,7 @@ public interface PhoneMapper {
                 .map(Price::price)
                 .filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        return sum.divide(BigDecimal.valueOf(list.size()), 2, RoundingMode.HALF_UP);
+        return sum.divide(BigDecimal.valueOf(list.size()), 2, RoundingMode.HALF_UP).multiply(new BigDecimal("4.6"));
     }
 
     static List<String> filterUrls(List<Image> images) {
