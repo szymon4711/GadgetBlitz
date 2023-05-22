@@ -1,7 +1,7 @@
 package com.app.gadgetblitz.controllers;
 
-import com.app.gadgetblitz.controllers.UserController;
-import com.app.gadgetblitz.models.user.User;
+import com.app.gadgetblitz.controller.UserController;
+import com.app.gadgetblitz.model.user.User;
 import com.app.gadgetblitz.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
