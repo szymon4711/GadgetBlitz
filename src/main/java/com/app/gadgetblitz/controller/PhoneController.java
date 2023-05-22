@@ -4,6 +4,9 @@ import com.app.gadgetblitz.dto.PhoneFullDto;
 import com.app.gadgetblitz.dto.PhoneSimpleDto;
 import com.app.gadgetblitz.service.PhoneService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +23,28 @@ public class PhoneController {
     MongoTemplate mongoTemplate;
     PhoneService phoneService;
 
+//    @GetMapping()
+//    public ResponseEntity<List<PhoneSimpleDto>> getAllPhones() {
+//        List<PhoneSimpleDto> phones = phoneService.findAll();
+//        if (phones.isEmpty())
+//            return ResponseEntity.notFound().build();
+//        return ResponseEntity.ok(phones);
+//    }
+
     @GetMapping()
-    public ResponseEntity<List<PhoneSimpleDto>> getAllPhones() {
-        List<PhoneSimpleDto> phones = phoneService.findAll();
-        if (phones.isEmpty())
+    public ResponseEntity<List<PhoneSimpleDto>> getAllPhones(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+        
+        List<PhoneSimpleDto> phonesPage = phoneService.findAll(page, size);
+
+        if (phonesPage.isEmpty())
             return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(phones);
+
+        return ResponseEntity.ok(phonesPage);
     }
+
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<PhoneFullDto>> getPhoneById(@PathVariable String id) {

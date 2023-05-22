@@ -6,6 +6,7 @@ import com.app.gadgetblitz.dto.mapper.PhoneMapper;
 import com.app.gadgetblitz.model.phone.Phone;
 import com.app.gadgetblitz.repository.PhoneRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -22,13 +23,15 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public class PhoneServiceImpl implements PhoneService {
     private final PhoneRepository repository;
+    private final PhoneMapper.Full phoneFullMapper;
     private final PhoneMapper.Simple phoneSimpleMapper;
     private final MongoTemplate mongoTemplate;
-    private final PhoneMapper.Full phoneFullMapper;
 
     @Override
-    public List<PhoneSimpleDto> findAll() {
-        return repository.findAll().stream().map(phoneSimpleMapper::toDto).collect(Collectors.toList());
+    public List<PhoneSimpleDto> findAll(Integer page, Integer size) {
+        return repository.findAll(PageRequest.of(page, size)).getContent().stream()
+                .map(phoneSimpleMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -55,7 +58,9 @@ public class PhoneServiceImpl implements PhoneService {
             c = new Criteria().andOperator(criteriaList.toArray(new Criteria[0]));
 
         Query query = new Query(c);
-        List<PhoneSimpleDto> phones = mongoTemplate.find(query, Phone.class).stream().map(phoneSimpleMapper::toDto).collect(Collectors.toList());
+        List<PhoneSimpleDto> phones = mongoTemplate.find(query, Phone.class).stream()
+                .map(phoneSimpleMapper::toDto)
+                .collect(Collectors.toList());
 
         phones = filterByPrice(priceMin, priceMax, phones);
         return phones;
