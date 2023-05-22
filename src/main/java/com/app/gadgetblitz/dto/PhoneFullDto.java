@@ -3,7 +3,6 @@ package com.app.gadgetblitz.dto;
 import com.app.gadgetblitz.model.phone.Data;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -14,5 +13,6 @@ public record PhoneFullDto(
         String name,
         Data data,
         List<String> urls,
-        BigDecimal price
+        Double price
+
 ) implements Serializable {}

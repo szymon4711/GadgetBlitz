@@ -1,9 +1,9 @@
 package com.app.gadgetblitz.model.phone;
 
 import com.app.gadgetblitz.model.phone.components.Image;
-import com.app.gadgetblitz.model.phone.components.Price;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
@@ -20,6 +20,7 @@ public class Phone {
 
     private List<Image> images;
 
-    private List<Price> prices;
+    @Field("avgPrice")
+    private Double price;
 
 }

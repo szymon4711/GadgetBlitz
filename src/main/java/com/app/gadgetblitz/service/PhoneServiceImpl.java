@@ -38,7 +38,7 @@ public class PhoneServiceImpl implements PhoneService {
     public List<PhoneSimpleDto> findBySpecification(String name, String brand,
                                                     Double sizeMin, Double sizeMax,
                                                     Integer storageMin, Integer storageMax,
-                                                    BigDecimal priceMin, BigDecimal priceMax,
+                                                    Double priceMin, Double priceMax,
                                                     Integer cameraBackMin, Integer cameraBackMax) {
 
         Criteria c = new Criteria();
@@ -53,32 +53,24 @@ public class PhoneServiceImpl implements PhoneService {
             criteriaList.add(addRangeCriteria(storageMin, storageMax, "data.storage.capacity__gb"));
         if (cameraBackMin != null || cameraBackMax != null)
             criteriaList.add(addRangeCriteria(cameraBackMin, cameraBackMax, "data.camera.camera_back__mp"));
+        if (priceMin != null || priceMax != null)
+            criteriaList.add(addRangeCriteria(priceMin, priceMax, "price"));
 
         if (!criteriaList.isEmpty())
             c = new Criteria().andOperator(criteriaList.toArray(new Criteria[0]));
 
         Query query = new Query(c);
-        List<PhoneSimpleDto> phones = mongoTemplate.find(query, Phone.class).stream()
+//                .with(PageRequest.of(0 ,2));
+        // TODO pagination
+
+        return mongoTemplate.find(query, Phone.class).stream()
                 .map(phoneSimpleMapper::toDto)
                 .collect(Collectors.toList());
-
-        phones = filterByPrice(priceMin, priceMax, phones);
-        return phones;
     }
 
     @Override
     public Optional<PhoneFullDto> findById(String id) {
         return repository.findById(id).map(phoneFullMapper::toDto);
-    }
-
-    private List<PhoneSimpleDto> filterByPrice(BigDecimal priceMin, BigDecimal priceMax, List<PhoneSimpleDto> phones) {
-        Stream<PhoneSimpleDto> phoneStream = phones.stream();
-        if (priceMin != null)
-            phoneStream = phoneStream.filter(p -> p.price().compareTo(priceMin) >= 0);
-        if (priceMax != null)
-            phoneStream = phoneStream.filter(p -> p.price().compareTo(priceMax) <= 0);
-        phones = phoneStream.toList();
-        return phones;
     }
 
     private <T extends Number> Criteria addRangeCriteria(T min, T max, String field) {

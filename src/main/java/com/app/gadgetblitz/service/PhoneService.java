@@ -15,7 +15,7 @@ public interface PhoneService {
     List<PhoneSimpleDto> findBySpecification(String name, String brand,
                                              Double sizeMin, Double sizeMax,
                                              Integer storageMin, Integer storageMax,
-                                             BigDecimal priceMin, BigDecimal priceMax,
+                                             Double priceMin, Double priceMax,
                                              Integer cameraBackMin, Integer cameraBackMax);
 
     Optional<PhoneFullDto> findById(String id);

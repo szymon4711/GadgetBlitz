@@ -1,9 +1,6 @@
 package com.app.gadgetblitz.dto;
 
-import lombok.Data;
-
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -17,6 +14,6 @@ public record PhoneSimpleDto(
         String system,
         Integer storage,
         List<String> urls,
-        BigDecimal price
+        Double price
 
 ) implements Serializable {}
