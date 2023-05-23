@@ -23,7 +23,7 @@ public class User implements UserDetails {
     private Address address;
     private Date created_at;
     private String email;
-    private Name name;
+    private String name;
     private Date updated_at;
     private Date date_of_birth;
     private String username;
