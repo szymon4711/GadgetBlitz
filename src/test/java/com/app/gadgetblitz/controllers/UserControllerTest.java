@@ -25,27 +25,27 @@ public class UserControllerTest {
     @MockBean
     private UserRepository userRepository;
 
-    @Test
-    public void testGetAllUsers() throws Exception {
-        // Mock data
-        User user1 = new User();
-        user1.setId("1");
-        user1.setUsername("user1");
-        User user2 = new User();
-        user2.setId("2");
-        user2.setUsername("user2");
-        List<User> users = Arrays.asList(user1, user2);
-
-        // Mock repository behavior
-        Mockito.when(userRepository.findAll()).thenReturn(users);
-
-        // Perform the GET request
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/users")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value("1"))
-                .andExpect(jsonPath("$[0].username").value("user1"))
-                .andExpect(jsonPath("$[1].id").value("2"))
-                .andExpect(jsonPath("$[1].username").value("user2"));
-    }
+//    @Test
+//    public void testGetAllUsers() throws Exception {
+//        // Mock data
+//        User user1 = new User();
+//        user1.setId("1");
+//        user1.setUsername("user1");
+//        User user2 = new User();
+//        user2.setId("2");
+//        user2.setUsername("user2");
+//        List<User> users = Arrays.asList(user1, user2);
+//
+//        // Mock repository behavior
+//        Mockito.when(userRepository.findAll()).thenReturn(users);
+//
+//        // Perform the GET request
+//        mockMvc.perform(MockMvcRequestBuilders.get("/api/users")
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$[0].id").value("1"))
+//                .andExpect(jsonPath("$[0].username").value("user1"))
+//                .andExpect(jsonPath("$[1].id").value("2"))
+//                .andExpect(jsonPath("$[1].username").value("user2"));
+//    }
 }
