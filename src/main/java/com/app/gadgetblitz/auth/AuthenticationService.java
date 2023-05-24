@@ -113,6 +113,10 @@ public class AuthenticationService {
             if(jwtService.isTokenValid(refreshToken, userDetails)) {
                 var accessToken = jwtService.generateToken(userDetails);
 
+                var user = repository.findByEmail(userEmail)
+                        .orElseThrow();
+                revokeAllUserTokens(user);
+                saveUserToken(user, accessToken);
 
                 var authReponse = AuthenticationResponse.builder()
                         .token(accessToken)
