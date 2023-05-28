@@ -3,14 +3,12 @@ package com.app.gadgetblitz.controller;
 import com.app.gadgetblitz.dto.PhoneFullDto;
 import com.app.gadgetblitz.dto.PhoneSimpleDto;
 import com.app.gadgetblitz.service.PhoneService;
-import jakarta.annotation.security.PermitAll;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -52,12 +50,14 @@ public class PhoneController {
             @RequestParam(required = false) Integer storageMax,
             @RequestParam(required = false) Double priceMin,
             @RequestParam(required = false) Double priceMax,
-            @RequestParam(required = false) Integer cameraBackMin,
-            @RequestParam(required = false) Integer cameraBackMax) {
+            @RequestParam(required = false) Integer batteryMin,
+            @RequestParam(required = false) Integer batteryMax,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
 
 
         Page<PhoneSimpleDto> phones = phoneService.findBySpecification(name, brand, sizeMin, sizeMax, storageMin,
-                storageMax, priceMin, priceMax, cameraBackMin, cameraBackMax);
+                storageMax, priceMin, priceMax, batteryMin, batteryMax, page, size);
 
         if (phones.isEmpty())
             return ResponseEntity.notFound().build();

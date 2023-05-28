@@ -4,6 +4,7 @@ import com.app.gadgetblitz.dto.PhoneFullDto;
 import com.app.gadgetblitz.dto.PhoneSimpleDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,7 +17,8 @@ public interface PhoneService {
                                              Double sizeMin, Double sizeMax,
                                              Integer storageMin, Integer storageMax,
                                              Double priceMin, Double priceMax,
-                                             Integer cameraBackMin, Integer cameraBackMax);
+                                             Integer batteryMin, Integer batteryMax,
+                                             Integer page, Integer size);
 
     Optional<PhoneFullDto> findById(String id);
 }
