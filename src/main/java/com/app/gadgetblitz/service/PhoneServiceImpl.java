@@ -6,10 +6,13 @@ import com.app.gadgetblitz.dto.mapper.PhoneMapper;
 import com.app.gadgetblitz.model.phone.Phone;
 import com.app.gadgetblitz.repository.PhoneRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -28,14 +31,14 @@ public class PhoneServiceImpl implements PhoneService {
     private final MongoTemplate mongoTemplate;
 
     @Override
-    public List<PhoneSimpleDto> findAll(Integer page, Integer size) {
-        return repository.findAll(PageRequest.of(page, size)).getContent().stream()
-                .map(phoneSimpleMapper::toDto)
-                .collect(Collectors.toList());
+    public Page<PhoneSimpleDto> findAll(Integer page, Integer size) {
+
+        return repository.findAll(PageRequest.of(page, size))
+                .map(phoneSimpleMapper::toDto);
     }
 
     @Override
-    public List<PhoneSimpleDto> findBySpecification(String name, String brand,
+    public Page<PhoneSimpleDto> findBySpecification(String name, String brand,
                                                     Double sizeMin, Double sizeMax,
                                                     Integer storageMin, Integer storageMax,
                                                     Double priceMin, Double priceMax,
@@ -59,13 +62,20 @@ public class PhoneServiceImpl implements PhoneService {
         if (!criteriaList.isEmpty())
             c = new Criteria().andOperator(criteriaList.toArray(new Criteria[0]));
 
-        Query query = new Query(c);
-//                .with(PageRequest.of(0 ,2));
+        Pageable pageable = PageRequest.of(0,5);
+
+        Query query = new Query(c)
+                .with(pageable);
         // TODO pagination
 
-        return mongoTemplate.find(query, Phone.class).stream()
+        List<PhoneSimpleDto> phones = mongoTemplate.find(query, Phone.class).stream()
                 .map(phoneSimpleMapper::toDto)
                 .collect(Collectors.toList());
+
+        return PageableExecutionUtils.getPage(
+                phones,
+                pageable,
+                () -> mongoTemplate.count(Query.of(query).limit(-1).skip(-1), Phone.class));
     }
 
     @Override

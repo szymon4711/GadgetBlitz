@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PhoneService {
-    List<PhoneSimpleDto> findAll(Integer page, Integer size);
+    Page<PhoneSimpleDto> findAll(Integer page, Integer size);
 
-    List<PhoneSimpleDto> findBySpecification(String name, String brand,
+    Page<PhoneSimpleDto> findBySpecification(String name, String brand,
                                              Double sizeMin, Double sizeMax,
                                              Integer storageMin, Integer storageMax,
                                              Double priceMin, Double priceMax,

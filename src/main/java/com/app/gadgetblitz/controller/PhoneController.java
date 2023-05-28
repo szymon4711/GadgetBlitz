@@ -3,7 +3,9 @@ package com.app.gadgetblitz.controller;
 import com.app.gadgetblitz.dto.PhoneFullDto;
 import com.app.gadgetblitz.dto.PhoneSimpleDto;
 import com.app.gadgetblitz.service.PhoneService;
+import jakarta.annotation.security.PermitAll;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +22,11 @@ public class PhoneController {
     PhoneService phoneService;
 
     @GetMapping()
-    public ResponseEntity<List<PhoneSimpleDto>> getAllPhones(
+    public ResponseEntity<Page<PhoneSimpleDto>> getAllPhones(
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size) {
         
-        List<PhoneSimpleDto> phonesPage = phoneService.findAll(page, size);
+        Page<PhoneSimpleDto> phonesPage = phoneService.findAll(page, size);
 
         if (phonesPage.isEmpty())
             return ResponseEntity.notFound().build();
@@ -41,7 +43,7 @@ public class PhoneController {
     }
 
     @GetMapping("search")
-    public ResponseEntity<List<PhoneSimpleDto>> getPhonesBySpecification(
+    public ResponseEntity<Page<PhoneSimpleDto>> getPhonesBySpecification(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String brand,
             @RequestParam(required = false) Double sizeMin,
@@ -54,7 +56,7 @@ public class PhoneController {
             @RequestParam(required = false) Integer cameraBackMax) {
 
 
-        List<PhoneSimpleDto> phones = phoneService.findBySpecification(name, brand, sizeMin, sizeMax, storageMin,
+        Page<PhoneSimpleDto> phones = phoneService.findBySpecification(name, brand, sizeMin, sizeMax, storageMin,
                 storageMax, priceMin, priceMax, cameraBackMin, cameraBackMax);
 
         if (phones.isEmpty())

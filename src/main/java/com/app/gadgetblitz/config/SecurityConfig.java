@@ -26,7 +26,7 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**")
+                .requestMatchers("/api/v1/auth/**", "/api/phones/**") // TODO zmienic na auth
                 .permitAll()
                 .anyRequest()
                 .authenticated()
