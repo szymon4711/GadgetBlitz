@@ -20,7 +20,7 @@ public interface PhoneMapper {
     interface Simple {
         @Mapping(source = "data.display.size__inch", target = "size")
         @Mapping(source = "data.software.os", target = "system")
-        @Mapping(source = "data.cpu.type", target = "procesor")
+        @Mapping(source = "data.battery.capacity__mAh", target = "battery")
         @Mapping(source = "data.storage.capacity__gb", target = "storage")
         @Mapping(target = "urls", expression = "java(PhoneMapper.filterUrls(phone.getImages()))")
         PhoneSimpleDto toDto(Phone phone);

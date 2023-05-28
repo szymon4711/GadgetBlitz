@@ -10,7 +10,9 @@ public record PhoneSimpleDto(
         String id,
         String name,
         Double size,
-        String procesor,
+//        String procesor,
+
+        Integer battery,
         String system,
         Integer storage,
         List<String> urls,
