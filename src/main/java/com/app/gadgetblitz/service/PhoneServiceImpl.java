@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -42,31 +43,37 @@ public class PhoneServiceImpl implements PhoneService {
                                                     Double sizeMin, Double sizeMax,
                                                     Integer storageMin, Integer storageMax,
                                                     Double priceMin, Double priceMax,
-                                                    Integer cameraBackMin, Integer cameraBackMax) {
+                                                    Integer batteryMin, Integer batteryMax,
+                                                    Integer page, Integer size) {
 
         Criteria c = new Criteria();
         List<Criteria> criteriaList = new ArrayList<>();
+
         if (name != null)
             criteriaList.add(Criteria.where("name").regex("(?i).*" + name + ".*"));
-        if (brand != null)
-            criteriaList.add(Criteria.where("data.general.brand").is(brand));
+        if (brand != null) {
+            List<Criteria> brandCriteriaList = new ArrayList<>();
+            String[] brands = brand.split(",");
+            for (String b : brands) {
+                brandCriteriaList.add(Criteria.where("data.general.brand").is(b));
+            }
+            criteriaList.add(new Criteria().orOperator(brandCriteriaList.toArray(new Criteria[0])));
+        }
         if (sizeMin != null || sizeMax != null)
             criteriaList.add(addRangeCriteria(sizeMin, sizeMax, "data.display.size__inch"));
         if (storageMin != null || storageMax != null)
             criteriaList.add(addRangeCriteria(storageMin, storageMax, "data.storage.capacity__gb"));
-        if (cameraBackMin != null || cameraBackMax != null)
-            criteriaList.add(addRangeCriteria(cameraBackMin, cameraBackMax, "data.camera.camera_back__mp"));
+        if (batteryMin != null || batteryMax != null)
+            criteriaList.add(addRangeCriteria(batteryMin, batteryMax, "data.battery.capacity__mAh"));
         if (priceMin != null || priceMax != null)
             criteriaList.add(addRangeCriteria(priceMin, priceMax, "price"));
 
         if (!criteriaList.isEmpty())
             c = new Criteria().andOperator(criteriaList.toArray(new Criteria[0]));
 
-        Pageable pageable = PageRequest.of(0,5);
+        Pageable pageable = PageRequest.of(page,size);
 
-        Query query = new Query(c)
-                .with(pageable);
-        // TODO pagination
+        Query query = new Query(c).with(pageable);
 
         List<PhoneSimpleDto> phones = mongoTemplate.find(query, Phone.class).stream()
                 .map(phoneSimpleMapper::toDto)
