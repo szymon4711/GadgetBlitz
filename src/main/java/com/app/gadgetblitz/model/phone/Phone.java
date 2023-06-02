@@ -23,4 +23,6 @@ public class Phone {
     @Field("avgPrice")
     private Double price;
 
+    private List<String> opinions;
+
 }

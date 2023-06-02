@@ -13,6 +13,7 @@ public record PhoneFullDto(
         String name,
         Data data,
         List<String> urls,
-        Double price
+        Double price,
+        List<String> opinions
 
 ) implements Serializable {}

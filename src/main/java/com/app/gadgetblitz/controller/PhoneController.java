@@ -2,6 +2,7 @@ package com.app.gadgetblitz.controller;
 
 import com.app.gadgetblitz.dto.PhoneFullDto;
 import com.app.gadgetblitz.dto.PhoneSimpleDto;
+import com.app.gadgetblitz.model.phone.Phone;
 import com.app.gadgetblitz.service.PhoneService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,7 +23,7 @@ public class PhoneController {
     @GetMapping()
     public ResponseEntity<Page<PhoneSimpleDto>> getAllPhones(
             @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "10") Integer size) {
+            @RequestParam(defaultValue = "9") Integer size) {
         
         Page<PhoneSimpleDto> phonesPage = phoneService.findAll(page, size);
 
@@ -53,7 +54,7 @@ public class PhoneController {
             @RequestParam(required = false) Integer batteryMin,
             @RequestParam(required = false) Integer batteryMax,
             @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "10") Integer size) {
+            @RequestParam(defaultValue = "9") Integer size) {
 
 
         Page<PhoneSimpleDto> phones = phoneService.findBySpecification(name, brand, sizeMin, sizeMax, storageMin,
@@ -62,5 +63,13 @@ public class PhoneController {
         if (phones.isEmpty())
             return ResponseEntity.notFound().build();
         return ResponseEntity.ok(phones);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PhoneFullDto> addOpinion(@PathVariable String id, @RequestBody String opinion) {
+
+        PhoneFullDto phoneDto = phoneService.addOpinion(id, opinion);
+
+        return ResponseEntity.ok(phoneDto);
     }
 }

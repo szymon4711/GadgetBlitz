@@ -82,7 +82,7 @@ class PhoneControllerTest {
     void testGetPhoneById() {
         // Prepare
         String id = "1";
-        PhoneFullDto phone = new PhoneFullDto("1", "Phone 1", null, new ArrayList<>(), 999.99);
+        PhoneFullDto phone = new PhoneFullDto("1", "Phone 1", null, new ArrayList<>(), 999.99, new ArrayList<>());
         when(phoneService.findById(id)).thenReturn(Optional.of(phone));
 
         // Execute

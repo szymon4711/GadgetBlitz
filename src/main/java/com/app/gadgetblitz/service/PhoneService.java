@@ -21,4 +21,6 @@ public interface PhoneService {
                                              Integer page, Integer size);
 
     Optional<PhoneFullDto> findById(String id);
+
+    PhoneFullDto addOpinion(String id, String opinion);
 }

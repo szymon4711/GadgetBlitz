@@ -13,8 +13,12 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -30,6 +34,7 @@ public class PhoneServiceImpl implements PhoneService {
     private final PhoneMapper.Full phoneFullMapper;
     private final PhoneMapper.Simple phoneSimpleMapper;
     private final MongoTemplate mongoTemplate;
+
 
     @Override
     public Page<PhoneSimpleDto> findAll(Integer page, Integer size) {
@@ -89,6 +94,22 @@ public class PhoneServiceImpl implements PhoneService {
     public Optional<PhoneFullDto> findById(String id) {
         return repository.findById(id).map(phoneFullMapper::toDto);
     }
+
+    @Override
+    public PhoneFullDto addOpinion(String id, String opinion) {
+        Optional<Phone> optionalPhone = repository.findById(id);
+        if (optionalPhone.isEmpty())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        Phone phone = optionalPhone.get();
+        if (phone.getOpinions() == null)
+            phone.setOpinions(new ArrayList<>());
+        phone.getOpinions().add(opinion);
+        repository.save(phone);
+//        System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
+        return phoneFullMapper.toDto(phone);
+    }
+
 
     private <T extends Number> Criteria addRangeCriteria(T min, T max, String field) {
         Criteria criteria = new Criteria();
