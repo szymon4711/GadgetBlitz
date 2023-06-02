@@ -18,6 +18,7 @@ public interface PhoneService {
                                              Integer storageMin, Integer storageMax,
                                              Double priceMin, Double priceMax,
                                              Integer batteryMin, Integer batteryMax,
+                                             String system,
                                              Integer page, Integer size);
 
     Optional<PhoneFullDto> findById(String id);

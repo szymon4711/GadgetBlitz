@@ -49,6 +49,7 @@ public class PhoneServiceImpl implements PhoneService {
                                                     Integer storageMin, Integer storageMax,
                                                     Double priceMin, Double priceMax,
                                                     Integer batteryMin, Integer batteryMax,
+                                                    String system,
                                                     Integer page, Integer size) {
 
         Criteria c = new Criteria();
@@ -56,6 +57,8 @@ public class PhoneServiceImpl implements PhoneService {
 
         if (name != null)
             criteriaList.add(Criteria.where("name").regex("(?i).*" + name + ".*"));
+        if (system != null)
+            criteriaList.add(Criteria.where("data.software.os").regex("(?i).*" + system + ".*"));
         if (brand != null) {
             List<Criteria> brandCriteriaList = new ArrayList<>();
             String[] brands = brand.split(",");

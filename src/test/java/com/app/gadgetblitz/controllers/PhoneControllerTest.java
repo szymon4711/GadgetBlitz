@@ -121,22 +121,23 @@ class PhoneControllerTest {
         Double priceMax = 1500.0;
         Integer cameraBackMin = 12;
         Integer cameraBackMax = 20;
+        String system = "OS 1";
         Integer page = 0;
         Integer size = 10;
         List<PhoneSimpleDto> phones = new ArrayList<>();
         phones.add(new PhoneSimpleDto("1", "Phone 1", 5.5, 11, "OS 1", 64, new ArrayList<>(), 999.99));
-        phones.add(new PhoneSimpleDto("2", "Phone 2", 6.0, 12, "OS 2", 128, new ArrayList<>(), 1499.99));
+        phones.add(new PhoneSimpleDto("2", "Phone 2", 6.0, 12, "OS 1", 128, new ArrayList<>(), 1499.99));
         Pageable pageable = PageRequest.of(page, size);
         Page<PhoneSimpleDto> phonePage = new PageImpl<>(phones, pageable, phones.size());
-        when(phoneService.findBySpecification(name, brand, sizeMin, sizeMax, storageMin, storageMax, priceMin, priceMax, cameraBackMin, cameraBackMax, page, size)).thenReturn(phonePage);
+        when(phoneService.findBySpecification(name, brand, sizeMin, sizeMax, storageMin, storageMax, priceMin, priceMax, cameraBackMin, cameraBackMax, system, page, size)).thenReturn(phonePage);
 
         // Execute
-        ResponseEntity<Page<PhoneSimpleDto>> response = phoneController.getPhonesBySpecification(name, brand, sizeMin, sizeMax, storageMin, storageMax, priceMin, priceMax, cameraBackMin, cameraBackMax, page, size);
+        ResponseEntity<Page<PhoneSimpleDto>> response = phoneController.getPhonesBySpecification(name, brand, sizeMin, sizeMax, storageMin, storageMax, priceMin, priceMax, cameraBackMin, cameraBackMax, system, page, size);
 
         // Verify
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(phonePage, response.getBody());
-        verify(phoneService, times(1)).findBySpecification(name, brand, sizeMin, sizeMax, storageMin, storageMax, priceMin, priceMax, cameraBackMin, cameraBackMax, page, size);
+        verify(phoneService, times(1)).findBySpecification(name, brand, sizeMin, sizeMax, storageMin, storageMax, priceMin, priceMax, cameraBackMin, cameraBackMax, system, page, size);
     }
 
     @Test
@@ -154,16 +155,17 @@ class PhoneControllerTest {
         Double priceMax = 1500.0;
         Integer cameraBackMin = 12;
         Integer cameraBackMax = 20;
+        String system = "OS 1";
         List<PhoneSimpleDto> phones = new ArrayList<>();
         Pageable pageable = PageRequest.of(page, size);
         Page<PhoneSimpleDto> phonePage = new PageImpl<>(phones, pageable, 0);
-        when(phoneService.findBySpecification(name, brand, sizeMin, sizeMax, storageMin, storageMax, priceMin, priceMax, cameraBackMin, cameraBackMax, page, size)).thenReturn(phonePage);
+        when(phoneService.findBySpecification(name, brand, sizeMin, sizeMax, storageMin, storageMax, priceMin, priceMax, cameraBackMin, cameraBackMax, system, page, size)).thenReturn(phonePage);
 
         // Execute
-        ResponseEntity<Page<PhoneSimpleDto>> response = phoneController.getPhonesBySpecification(name, brand, sizeMin, sizeMax, storageMin, storageMax, priceMin, priceMax, cameraBackMin, cameraBackMax, page, size);
+        ResponseEntity<Page<PhoneSimpleDto>> response = phoneController.getPhonesBySpecification(name, brand, sizeMin, sizeMax, storageMin, storageMax, priceMin, priceMax, cameraBackMin, cameraBackMax, system, page, size);
 
         // Verify
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        verify(phoneService, times(1)).findBySpecification(name, brand, sizeMin, sizeMax, storageMin, storageMax, priceMin, priceMax, cameraBackMin, cameraBackMax, page, size);
+        verify(phoneService, times(1)).findBySpecification(name, brand, sizeMin, sizeMax, storageMin, storageMax, priceMin, priceMax, cameraBackMin, cameraBackMax, system, page, size);
     }
 }

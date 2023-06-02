@@ -53,12 +53,13 @@ public class PhoneController {
             @RequestParam(required = false) Double priceMax,
             @RequestParam(required = false) Integer batteryMin,
             @RequestParam(required = false) Integer batteryMax,
+            @RequestParam(required = false) String system,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "9") Integer size) {
 
 
         Page<PhoneSimpleDto> phones = phoneService.findBySpecification(name, brand, sizeMin, sizeMax, storageMin,
-                storageMax, priceMin, priceMax, batteryMin, batteryMax, page, size);
+                storageMax, priceMin, priceMax, batteryMin, batteryMax, system, page, size);
 
         if (phones.isEmpty())
             return ResponseEntity.notFound().build();
@@ -67,9 +68,7 @@ public class PhoneController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PhoneFullDto> addOpinion(@PathVariable String id, @RequestBody String opinion) {
-
         PhoneFullDto phoneDto = phoneService.addOpinion(id, opinion);
-
         return ResponseEntity.ok(phoneDto);
     }
 }
