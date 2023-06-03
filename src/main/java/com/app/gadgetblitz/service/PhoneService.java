@@ -2,12 +2,9 @@ package com.app.gadgetblitz.service;
 
 import com.app.gadgetblitz.dto.PhoneFullDto;
 import com.app.gadgetblitz.dto.PhoneSimpleDto;
+import com.app.gadgetblitz.model.phone.Opinion;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 public interface PhoneService {
@@ -23,5 +20,5 @@ public interface PhoneService {
 
     Optional<PhoneFullDto> findById(String id);
 
-    PhoneFullDto addOpinion(String id, String opinion);
+    PhoneFullDto addOpinion(String id, Opinion opinion);
 }

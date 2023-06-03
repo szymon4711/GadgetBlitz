@@ -3,6 +3,7 @@ package com.app.gadgetblitz.service;
 import com.app.gadgetblitz.dto.PhoneFullDto;
 import com.app.gadgetblitz.dto.PhoneSimpleDto;
 import com.app.gadgetblitz.dto.mapper.PhoneMapper;
+import com.app.gadgetblitz.model.phone.Opinion;
 import com.app.gadgetblitz.model.phone.Phone;
 import com.app.gadgetblitz.repository.PhoneRepository;
 import lombok.AllArgsConstructor;
@@ -14,18 +15,13 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
@@ -79,7 +75,7 @@ public class PhoneServiceImpl implements PhoneService {
         if (!criteriaList.isEmpty())
             c = new Criteria().andOperator(criteriaList.toArray(new Criteria[0]));
 
-        Pageable pageable = PageRequest.of(page,size);
+        Pageable pageable = PageRequest.of(page, size);
 
         Query query = new Query(c).with(pageable);
 
@@ -99,7 +95,7 @@ public class PhoneServiceImpl implements PhoneService {
     }
 
     @Override
-    public PhoneFullDto addOpinion(String id, String opinion) {
+    public PhoneFullDto addOpinion(String id, Opinion opinion) {
         Optional<Phone> optionalPhone = repository.findById(id);
         if (optionalPhone.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -109,23 +105,23 @@ public class PhoneServiceImpl implements PhoneService {
             phone.setOpinions(new ArrayList<>());
         phone.getOpinions().add(opinion);
         repository.save(phone);
-//        System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
         return phoneFullMapper.toDto(phone);
     }
 
 
     private <T extends Number> Criteria addRangeCriteria(T min, T max, String field) {
         Criteria criteria = new Criteria();
-        if (min != null && max != null) {
+
+        if (min != null && max != null)
             criteria.andOperator(
-                    Criteria.where(field).gte(min),
-                    Criteria.where(field).lte(max)
+                Criteria.where(field).gte(min),
+                Criteria.where(field).lte(max)
             );
-        } else if (min != null) {
+        else if (min != null)
             criteria.and(field).gte(min);
-        } else if (max != null) {
+        else if (max != null)
             criteria.and(field).lte(max);
-        }
+
         return criteria;
     }
 }

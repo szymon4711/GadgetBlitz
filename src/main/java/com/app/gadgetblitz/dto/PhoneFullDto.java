@@ -1,6 +1,7 @@
 package com.app.gadgetblitz.dto;
 
 import com.app.gadgetblitz.model.phone.Data;
+import com.app.gadgetblitz.model.phone.Opinion;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,6 +15,7 @@ public record PhoneFullDto(
         Data data,
         List<String> urls,
         Double price,
-        List<String> opinions
+        List<Opinion> opinions,
+        Double rating
 
 ) implements Serializable {}

@@ -14,6 +14,7 @@ public record PhoneSimpleDto(
         String system,
         Integer storage,
         List<String> urls,
-        Double price
+        Double price,
+        Double rating
 
 ) implements Serializable {}

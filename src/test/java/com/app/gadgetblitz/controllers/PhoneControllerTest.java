@@ -42,8 +42,8 @@ class PhoneControllerTest {
         Integer page = 0;
         Integer size = 10;
         List<PhoneSimpleDto> phones = new ArrayList<>();
-        phones.add(new PhoneSimpleDto("1", "Phone 1", 5.5, 111, "OS 1", 64, new ArrayList<>(), 999.99));
-        phones.add(new PhoneSimpleDto("2", "Phone 2", 6.0, 112, "OS 2", 128, new ArrayList<>(), 1499.99));
+        phones.add(new PhoneSimpleDto("1", "Phone 1", 5.5, 111, "OS 1", 64, new ArrayList<>(), 999.99, 1.1));
+        phones.add(new PhoneSimpleDto("2", "Phone 2", 6.0, 112, "OS 2", 128, new ArrayList<>(), 1499.99, 3.4));
 
         Pageable pageable = PageRequest.of(page, size);
         Page<PhoneSimpleDto> phonePage = new PageImpl<>(phones, pageable, phones.size());
@@ -82,7 +82,7 @@ class PhoneControllerTest {
     void testGetPhoneById() {
         // Prepare
         String id = "1";
-        PhoneFullDto phone = new PhoneFullDto("1", "Phone 1", null, new ArrayList<>(), 999.99, new ArrayList<>());
+        PhoneFullDto phone = new PhoneFullDto("1", "Phone 1", null, new ArrayList<>(), 999.99, new ArrayList<>(), 1.1);
         when(phoneService.findById(id)).thenReturn(Optional.of(phone));
 
         // Execute
@@ -125,8 +125,8 @@ class PhoneControllerTest {
         Integer page = 0;
         Integer size = 10;
         List<PhoneSimpleDto> phones = new ArrayList<>();
-        phones.add(new PhoneSimpleDto("1", "Phone 1", 5.5, 11, "OS 1", 64, new ArrayList<>(), 999.99));
-        phones.add(new PhoneSimpleDto("2", "Phone 2", 6.0, 12, "OS 1", 128, new ArrayList<>(), 1499.99));
+        phones.add(new PhoneSimpleDto("1", "Phone 1", 5.5, 11, "OS 1", 64, new ArrayList<>(), 999.99, 5.0));
+        phones.add(new PhoneSimpleDto("2", "Phone 2", 6.0, 12, "OS 1", 128, new ArrayList<>(), 1499.99, 4.1));
         Pageable pageable = PageRequest.of(page, size);
         Page<PhoneSimpleDto> phonePage = new PageImpl<>(phones, pageable, phones.size());
         when(phoneService.findBySpecification(name, brand, sizeMin, sizeMax, storageMin, storageMax, priceMin, priceMax, cameraBackMin, cameraBackMax, system, page, size)).thenReturn(phonePage);

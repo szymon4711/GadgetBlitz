@@ -2,6 +2,7 @@ package com.app.gadgetblitz.dto.mapper;
 
 import com.app.gadgetblitz.dto.PhoneFullDto;
 import com.app.gadgetblitz.dto.PhoneSimpleDto;
+import com.app.gadgetblitz.model.phone.Opinion;
 import com.app.gadgetblitz.model.phone.Phone;
 import com.app.gadgetblitz.model.phone.components.Image;
 import org.mapstruct.Mapper;
@@ -9,6 +10,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -23,12 +25,16 @@ public interface PhoneMapper {
         @Mapping(source = "data.battery.capacity__mAh", target = "battery")
         @Mapping(source = "data.storage.capacity__gb", target = "storage")
         @Mapping(target = "urls", expression = "java(PhoneMapper.filterUrls(phone.getImages()))")
+        @Mapping(target = "rating", expression = "java(PhoneMapper.calculateAverageRating(phone.getOpinions()))")
+        @Mapping(target = "price", expression = "java(PhoneMapper.round(phone.getPrice()))")
         PhoneSimpleDto toDto(Phone phone);
     }
 
     @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
     interface Full {
         @Mapping(target = "urls", expression = "java(PhoneMapper.filterUrls(phone.getImages()))")
+        @Mapping(target = "rating", expression = "java(PhoneMapper.calculateAverageRating(phone.getOpinions()))")
+        @Mapping(target = "price", expression = "java(PhoneMapper.round(phone.getPrice()))")
         PhoneFullDto toDto(Phone phone);
     }
 
@@ -40,5 +46,25 @@ public interface PhoneMapper {
                 .filter(Objects::nonNull)
                 .map(Image::url)
                 .collect(Collectors.toList());
+    }
+
+    static Double calculateAverageRating(List<Opinion> opinions) {
+        if (opinions == null || opinions.isEmpty()) {
+            return 0.0;
+        }
+
+        double averageRating = opinions.stream()
+                .mapToInt(Opinion::getRating)
+                .average()
+                .orElse(0);
+
+        DecimalFormat df = new DecimalFormat("#.00");
+        return Double.valueOf(df.format(averageRating));
+    }
+
+    static Double round(Double price) {
+        if (price == null)
+            return null;
+        return Math.round(price / 100.0) * 100.0 - 1;
     }
 }

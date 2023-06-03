@@ -2,7 +2,7 @@ package com.app.gadgetblitz.controller;
 
 import com.app.gadgetblitz.dto.PhoneFullDto;
 import com.app.gadgetblitz.dto.PhoneSimpleDto;
-import com.app.gadgetblitz.model.phone.Phone;
+import com.app.gadgetblitz.model.phone.Opinion;
 import com.app.gadgetblitz.service.PhoneService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -67,7 +67,10 @@ public class PhoneController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PhoneFullDto> addOpinion(@PathVariable String id, @RequestBody String opinion) {
+    public ResponseEntity<PhoneFullDto> addOpinion(
+            @PathVariable String id,
+            @RequestBody Opinion opinion) {
+
         PhoneFullDto phoneDto = phoneService.addOpinion(id, opinion);
         return ResponseEntity.ok(phoneDto);
     }
